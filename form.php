@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>This file has been changed</title>
 	<meta charset=utf-8>
 	<meta name=description content="simple form for a guestbook">
 	<meta name=viewport content="width=device-width, initial-scale=1">
