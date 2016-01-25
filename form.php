@@ -59,7 +59,7 @@ if(isset($_POST['submit'])){
 
 ?>
 <div class="butt">
-	<a class="back" href="login.php">Back to Login</a>
+	<a class="back" href="index.php">Back to Login</a>
 </div>
 <h1>The GuestBook!</h1>
 <p class="welcome">Welcome <strong><?php echo($_SESSION['user']);?></strong>! Here you can leave a review for our awesome online store. Please remember to be good!</p>
