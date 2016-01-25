@@ -1,87 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>This file has been changed</title>
+	<title>Guestbook form</title>
 	<meta charset=utf-8>
 	<meta name=description content="simple form for a guestbook">
 	<meta name=viewport content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="style.css">
 </head>
-<style>
-	h1 {
-		margin-left: 114px;
-	}
-	.error{
-		color: red;
-	}
-	.post-block {
-		background: #CDF1A3;
-		max-width: 400px;
-		margin: 20px;
-		padding: 10px;
-	}
-	form {
-		background: hsla(192, 100%, 48%, 0.48);
-		margin: 20px;
-		padding: 10px;
-		max-width: 400px;
-		border-radius: 10px;
-		box-shadow: 1px 2px 15px 2px;
-	}
-	.form_element{
-		margin: 10px;
-	}
-	form input[name="username"], form input[name="email"], form input[name="password"], textarea{
-		padding: 5px;
-		border-radius: 5px;
-		box-shadow: 0px 0px 0px 1px inset;
-		min-width: 250px;
-	}
-	form input[name="username"]{
-		margin-left: 20px;
-	}
-	form input[name="email"]{
-		margin-left: 54px;
-	}
-	form input[name="password"]{
-		margin-left: 30px;
-	}
-	form input[type="radio"]{
-		margin-left: 43px;
-	}
-	textarea {
-		margin-left: 21px; 	
-		min-height: 100px;
-	}
-	label.comment{
-		vertical-align: top;
-		display: inline-block;
-		margin-top: 10px;
-	}
-	input[type="submit"]{
-		border-radius: 5px;
-		padding: 10px;
-		font: 22px/24px sans-serif;
-		font-weight: bold;
-		text-transform: uppercase;
-		background: #FFEB3B;
-		margin: 5px;
-	}
-	input[type="submit"]:hover{
-		background: #A7FF00;
-		cursor: pointer;
-	}
-
-</style>
 <body>
 <?php 
-
+session_start();
 // defining variables
 $username = '';
 $email = '';
-$password = '';
 $comments = '';
 $gender = '';
-$username_err_msg = $email_err_msg = $password_err_msg = $comments_err_msg = $gender_err_msg =  '';
+$username_err_msg = $email_err_msg  = $comments_err_msg = $gender_err_msg =  '';
 $date = date('d.m.y');
 
 // data validation
@@ -100,12 +34,6 @@ if(isset($_POST['submit'])){
 	} else {
 		$email = $_POST['email'];
 	}
-	if(!isset($_POST['password']) || $_POST['password'] === ''){
-		$ok = false;
-		$password_err_msg = 'Password is not correct';
-	} else {
-		$password = $_POST['password'];
-	} 
 	if(!isset($_POST['comments']) || $_POST['comments'] === ''){
 		$ok = false;
 		$comments_err_msg = 'Comment is not entered';
@@ -120,7 +48,7 @@ if(isset($_POST['submit'])){
 	}
 
 	if($ok){
-		$arr = [$_POST['username'], $_POST['email'], $_POST['password'], $_POST['comments'], $_POST['gender'], $date];
+		$arr = [$_POST['username'], $_POST['email'], $_POST['comments'], $_POST['gender'], $date];
 		// writing data to a csv file
 		$file = fopen('file.csv', 'a');
 		fputcsv($file, $arr);
@@ -130,7 +58,11 @@ if(isset($_POST['submit'])){
 	}
 
 ?>
+<div class="butt">
+	<a class="back" href="login.php">Back to Login</a>
+</div>
 <h1>The GuestBook!</h1>
+<p class="welcome">Welcome <strong><?php echo($_SESSION['user']);?></strong>! Here you can leave a review for our awesome online store. Please remember to be good!</p>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 	<div class="form_element">
 		<label>User Name:</label>
@@ -139,10 +71,6 @@ if(isset($_POST['submit'])){
 	<div class="form_element">
 		<label>Email:</label>
 		<input type="text" name="email" value="<?php if(isset($_POST['email'])){echo htmlspecialchars($_POST['email']);} ?>"><span class='error'><?php echo $email_err_msg; ?></span><br>
-	</div>
-	<div class="form_element">
-		<label>Password:</label>
-		<input type="password" name="password" value="<?php if(isset($_POST['password'])){echo htmlspecialchars($_POST['password']);} ?>"><span class='error'><?php echo $password_err_msg; ?></span><br>
 	</div>
 	<div class="form_element">
 		<label>Gender:</label>
@@ -170,8 +98,8 @@ if(isset($_POST['submit'])){
 		$posts = fopen("file.csv", "r");
 		while(($data = fgetcsv($posts, 1000, ",")) !== false){
 			echo"<div class='post-block'>
-            <b>".$data[0]." </b><i>".$data[1]."</i> <i style='text-decoration: underline;'>".$data[5]."</i>"."
-            <p>".$data[3]."</p>
+            <b>".$data[0]." </b><i>".$data[1]."</i> <i style='text-decoration: underline;'>".$data[4]."</i>"."
+            <p>".$data[2]."</p>
         	</div>";
 		}
 		fclose($posts);
